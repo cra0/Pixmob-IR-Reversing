@@ -15,7 +15,10 @@ My soldering skills are pretty shit however I managed to connect some wires to i
 
 ### Memory structure
 
+TBC
+
 ## Other projects
 
 1. [PixMob IR (and RF!) Reverse Engineering Project](https://github.com/danielweidman/pixmob-ir-reverse-engineering)
 2. [PixMob_waveband reverse engineering](https://github.com/sueppchen/PixMob_waveband/tree/main)
+3. [ndp2019-wristband-teardown](https://github.com/yeokm1/ndp2019-wristband-teardown)
