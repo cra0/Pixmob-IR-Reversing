@@ -6,12 +6,35 @@ While numerous repositories have explored and successfully reverse-engineered va
 
 ![pcb](docs/pixmob-pcb-v2_3_r1.jpg)
 
+
+### MCU
+
+To be filled.
+
+
 ### EEPROM dump
 The [/dumps](dumps/) directory contains what I've extracted from the SMD eeprom labeled **C24C02** from a few wristbands.
 
 My soldering skills are pretty shit however I managed to connect some wires to it. After using the [Bus Pirate 5](https://hardware.buspirate.com/) I successfully dumped the contents.
 
 ![c24c02 SMD](docs/eeprom-dmp1.jpg)
+
+I got my hands on another few samples to mess with shortly after. These I connected proper probes to and also dumped it's contents which appears to be the same.
+
+![c24c02 SMD](docs/eeprom-dmp2.jpg)
+
+#### Behavior
+
+When the PixMob is provided power the MCU appears to wipe the EEPROM and write a default state to it.
+
+```hex
+09 00 00 01 00 00 00 00 01 01 01 01 01 01 01 01
+00 BF 00 BF 00 BF 60 1F 00 60 BF 1F 00 00 BF BF
+BF 00 BF 7E BF 00 00 BF BF BF 00 7E 60 BF 00 1F
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 BF
+BF BF 3D 00 00 00 1E 1E 1E 70 06 FF FF FF FF FF
+```
 
 ### Memory structure
 
