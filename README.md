@@ -23,7 +23,9 @@ I got my hands on another few samples to mess with shortly after. These I connec
 
 ![c24c02 SMD](docs/eeprom-dmp2.jpg)
 
-#### Behavior
+![AK13L SMD](docs/eeprom-dmp3.jpg)
+
+#### Behaviour
 
 When the PixMob is provided power the MCU appears to wipe the EEPROM and write a default state to it.
 
