@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "I2C2DMP": {
+      "commandName": "Project",
+      "commandLineArgs": "data.txt"
+    }
+  }
+}
