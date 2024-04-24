@@ -9,7 +9,8 @@ While numerous repositories have explored and successfully reverse-engineered va
 
 ### MCU
 
-To be filled.
+TO_BE_FILLED_OUT
+![mcu](docs/mcu.jpg)
 
 
 ### EEPROM dump
@@ -24,6 +25,8 @@ I got my hands on another few samples to mess with shortly after. These I connec
 ![c24c02 SMD](docs/eeprom-dmp2.jpg)
 
 ![AK13L SMD](docs/eeprom-dmp3.jpg)
+
+[Data Sheet](docs/AT24C02.pdf)
 
 #### Behaviour
 
@@ -40,7 +43,10 @@ BF BF 3D 00 00 00 1E 1E 1E 70 06 FF FF FF FF FF
 
 ### Memory structure
 
-TBC
+TO_BE_FILLED_OUT
+
+![010editor_sc](docs/eeprom_struct.png)
+
 
 ## Other projects
 
