@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DMP2I2C": {
+      "commandName": "Project",
+      "commandLineArgs": "data.bin"
+    }
+  }
+}
