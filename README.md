@@ -44,7 +44,7 @@ BF 00 BF 7E BF 00 00 BF BF BF 00 7E 60 BF 00 1F
 BF BF 3D 00 00 00 1E 1E 1E 70 06 FF FF FF FF FF
 ```
 
-I've intensionally left out the rest of the data as it's mostly **FF**. However pointed out to me by [@sammy](https://github.com/samyk) there appears to be some data in the last 8 bytes of the 256 bytes.
+I've intensionally left out the rest of the data as it's mostly **FF**. However pointed out to me by [@sammy](https://github.com/samyk) there appears to be some data in the last 8 bytes of the 256 block.
 
 #### Memory structure
 
