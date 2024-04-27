@@ -1,0 +1,118 @@
+//------------------------------------------------
+// PIXMOB EEPROM 24C02
+//------------------------------------------------
+
+typedef int bool;
+#define true  1;
+#define false 0;
+
+//c++
+typedef byte int8_t;
+typedef int16 int16_t;
+typedef int32 int32_t;
+typedef int64 int64_t;
+typedef int64 intptr_t;
+
+typedef uchar uint8_t;
+typedef uint16 uint16_t;
+typedef uint32 uint32_t;
+typedef uint64 uint64_t;
+typedef uint64 uintptr_t;
+
+long PaddingAlign(long num, int alignTo) {
+    return (num % alignTo == 0) ? 0 : alignTo - (num % alignTo);
+}
+
+bool AlignFS(int alignTo) {
+    local int b2skip = PaddingAlign(FTell(), alignTo);
+    FSkip(b2skip);
+    return true;
+}
+
+ubyte CalcCheckSum8(ubyte colA, ubyte colB, ubyte colC)
+{
+    local ubyte output = (colA + colB + colC) & 0xFF;
+    return output;
+}
+
+typedef enum <byte>
+{
+    IF_MODE = 0x0,
+    MEM_MODE = 0x11,
+} PIX_CTRL_MODE;
+
+typedef struct {
+    uint8_t control_bit0 : 1;
+    uint8_t control_bit1 : 1;
+    uint8_t control_bit2 : 1;
+    uint8_t control_bit3 : 1;
+    uint8_t control_bit4 : 1;
+    uint8_t control_bit5 : 1;
+    uint8_t control_bit6 : 1;
+    uint8_t control_bit7 : 1;
+} _PIXMOB_CONTROL_REGISTER;
+
+typedef struct {
+    uint8_t color_green <fgcolor=cBlack, bgcolor=0x00FF00>;
+    uint8_t color_red <fgcolor=cBlack, bgcolor=0x0000FF>;
+    uint8_t color_blue <fgcolor=cBlack, bgcolor=0xFF0000>;
+    uint8_t checksum <comment="checksum">; // ((color_green+color_red+color_blue) & 0xFF)
+    Printf("Col(%x,%x,%x) => [%x]\n", color_green, color_red, color_blue, 
+                            CalcCheckSum8(color_green, color_red, color_blue));
+} _PIXMOB_COLOR_Profile;
+
+typedef struct {
+    _PIXMOB_CONTROL_REGISTER control_a;
+    uint8_t control_b;
+    uint8_t control_c;
+    uint8_t control_d;
+    PIX_CTRL_MODE control_e;
+    uint8_t control_f;
+    uint8_t control_g;
+    uint8_t control_h;
+} _PIXMOB_EEPROM_CTRL_MAIN;
+
+typedef struct {
+    _PIXMOB_EEPROM_CTRL_MAIN ctrl_main;
+    uint8_t color_profile_settings[8];
+    _PIXMOB_COLOR_Profile color1;
+    _PIXMOB_COLOR_Profile color2;
+    _PIXMOB_COLOR_Profile color3;
+    _PIXMOB_COLOR_Profile color4;
+    _PIXMOB_COLOR_Profile color5;
+    _PIXMOB_COLOR_Profile color6;
+    _PIXMOB_COLOR_Profile color7;
+    _PIXMOB_COLOR_Profile color8;
+    _PIXMOB_COLOR_Profile color9;
+    _PIXMOB_COLOR_Profile color10;
+    _PIXMOB_COLOR_Profile color11;
+    _PIXMOB_COLOR_Profile color12;
+    _PIXMOB_COLOR_Profile color13;
+    _PIXMOB_COLOR_Profile color14;
+    _PIXMOB_COLOR_Profile color15;
+    _PIXMOB_COLOR_Profile color16;
+} _PIXMOB_MEM_SECTION_A;
+
+typedef struct {
+    uint8_t cfg_col_green_brightness_value <fgcolor=cBlack, bgcolor=0x00FF00>;
+    uint8_t cfg_col_red_brightness_value <fgcolor=cBlack, bgcolor=0x0000FF>;
+    uint8_t cfg_col_blue_brightness_value <fgcolor=cBlack, bgcolor=0xFF0000>;
+    uint8_t cfg_attack_intensity;
+    uint8_t cfg_hold_timer; //How long to stay at that intensity before starting to dim
+    uint8_t cfg_release_timer; //How slow to fade from full intensity to dim
+    uint8_t cfg_valD; //nooo idea what this is
+    uint8_t cfg_valE; //0x20 or 0x06 idk what this is
+} _PIXMOB_MEM_SECTION_B;
+
+//These chips work in big Endian
+BigEndian();
+
+//local vars
+local int64 fp = 0;
+local int64 fileSize = FileSize();
+local byte currentByte = 0;
+
+FSeek(0);
+
+_PIXMOB_MEM_SECTION_A mem_a;
+_PIXMOB_MEM_SECTION_B eeprom_mem_config;

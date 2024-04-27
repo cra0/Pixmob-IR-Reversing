@@ -9,7 +9,10 @@ While numerous repositories have explored and successfully reverse-engineered va
 
 ### MCU
 
-TO_BE_FILLED_OUT
+There seems a few different variants of these in the wild.
+I've come across one that has nothing written on it which I suspect is an ABOV model. I did discover one model that hasn't been seen before that has markings.
+
+[Data Sheet](docs/NY8A054E.pdf) for that one is here.
 ![mcu](docs/mcu.jpg)
 
 
@@ -41,9 +44,12 @@ BF 00 BF 7E BF 00 00 BF BF BF 00 7E 60 BF 00 1F
 BF BF 3D 00 00 00 1E 1E 1E 70 06 FF FF FF FF FF
 ```
 
+I've intensionally left out the rest of the data as it's mostly **FF**. However pointed out to me by [@sammy](https://github.com/samyk) there appears to be some data in the last 8 bytes of the 256 bytes.
+
 ### Memory structure
 
-TO_BE_FILLED_OUT
+You can find my research for the structure in [/scripts/PIXMOB_EEPROM_flash2.bt](scripts/PIXMOB_EEPROM_flash2.bt)
+which works for [010Editor](https://www.sweetscape.com/010editor/).
 
 ![010editor_sc](docs/eeprom_struct.png)
 
