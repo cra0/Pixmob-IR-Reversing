@@ -16,7 +16,7 @@ I've come across one that has nothing written on it which I suspect is an ABOV m
 ![mcu](docs/mcu.jpg)
 
 
-### EEPROM dump
+### EEPROM
 The [/dumps](dumps/) directory contains what I've extracted from the SMD eeprom labeled **C24C02** from a few wristbands.
 
 My soldering skills are pretty shit however I managed to connect some wires to it. After using the [Bus Pirate 5](https://hardware.buspirate.com/) I successfully dumped the contents.
@@ -46,13 +46,16 @@ BF BF 3D 00 00 00 1E 1E 1E 70 06 FF FF FF FF FF
 
 I've intensionally left out the rest of the data as it's mostly **FF**. However pointed out to me by [@sammy](https://github.com/samyk) there appears to be some data in the last 8 bytes of the 256 bytes.
 
-### Memory structure
+#### Memory structure
 
 You can find my research for the structure in [/scripts/PIXMOB_EEPROM_flash2.bt](scripts/PIXMOB_EEPROM_flash2.bt)
 which works for [010Editor](https://www.sweetscape.com/010editor/).
 
 ![010editor_sc](docs/eeprom_struct.png)
 
+### Future Work
+
+TO FILL OUT
 
 ## Other projects
 
