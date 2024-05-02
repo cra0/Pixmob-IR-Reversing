@@ -31,9 +31,18 @@ I got my hands on another few samples to mess with shortly after. These I connec
 
 [Data Sheet](docs/AT24C02.pdf)
 
+The address we interface with the EEPROM is:
+
+* `0x50`
+    * (0xA0) **WRITE**
+    * (0xA1) **READ**
+
 #### Behaviour
 
-When the PixMob is provided power the MCU appears to wipe the EEPROM and write a default state to it.
+When the PixMob is provided power the MCU appears to wipe the EEPROM and write a default state to it if certain criteria isn't met.
+
+This was discovered using a logic analyzer attached to the PCB while observing the boot up sequence when power was supplied to the Pixmob bracelet.
+![DSView](docs/logic_analyserSS.png)
 
 ```hex
 09 00 00 01 00 00 00 00 01 01 01 01 01 01 01 01
@@ -44,18 +53,71 @@ BF 00 BF 7E BF 00 00 BF BF BF 00 7E 60 BF 00 1F
 BF BF 3D 00 00 00 1E 1E 1E 70 06 FF FF FF FF FF
 ```
 
-I've intensionally left out the rest of the data as it's mostly **FF**. However pointed out to me by [@sammy](https://github.com/samyk) there appears to be some data in the last 8 bytes of the 256 block.
+The startup procedure goes something like this:
+
+##### Default startup
+1. A read is performed at `0x00` = [0x09]
+2. A read is performed at `0x03` = [0x01]
+3. A read is performed at `0x02` = [0x00]
+4. A read is performed at `0x01` = [0x00]
+5. A read is performed at `0x08` = [0x01]
+6. A read is performed at `0x04` = [0x01] (Read the mode)
+
+##### EEPROM startup
+
+1. Address `0x00` is set for read, and data `0x09` is read back.
+2. Address `0x03` is set for read, and data `0x04` is read back.
+3. Address `0x02` is set for read, and data `0x02` is read back.
+4. Address `0x01` is set for read, and data `0x00` is read back.
+5. Address `0x08` is set for read, and data `0x01` is read back.
+6. Address `0x04` is set for read, and data `0x11` is read back.
+
+***0x11*** **means EEPROM_MODE** so it will read starting from `0x50`
+
+7. Address `0x50` is set for read, and data `0x00` is read back.
+    * **eeprom_mem_config->COLOR GREEN**
+8. Address `0x51` is set for read, and data `0x00` is read back.
+    * **eeprom_mem_config->COLOR RED**
+9. Address `0x52` is set for read, and data `0x00` is read back.
+    * **eeprom_mem_config->COLOR BLUE**
+10. Address `0x53` is set for read, and data `0x1F` is read back.
+    * **eeprom_mem_config->Attack intensity**
+11. Address `0x54` is set for read, and data `0x1E` is read back.
+    * **eeprom_mem_config->Hold timer**
+12. Address `0x55` is set for read, and data `0x1E` is read back.
+    * **eeprom_mem_config->Release timer**
+13. Address `0x56` is set for read, and data `0x70` is read back.
+    * **eeprom_mem_config->Unknown ??**
+14. Address `0x57` is set for read, and data `0x06` is read back.
+    * **eeprom_mem_config->Unknown ??**
+15. Address `0x14` is set for read, and data `0x98` is read back.
+    * **mem_a->color2->green**
+16. Address `0x15` is set for read, and data `0xC0` is read back.
+    * **mem_a->color2->red**
+17. Address `0x16` is set for read, and data `0x30` is read back.
+    * **mem_a->color2->blue**
+18. Address `0x17` is set for read, and data `0x88` is read back.
+    * **mem_a->color2->checksum**
+
+
+I've intensionally left out the rest of the data as it's mostly **FF**. However, pointed out to me by [@sammy](https://github.com/samyk) there appears to be some data in the last 8 bytes of the 256 block when the eeprom is powered and active. These are (my guess) something to do with the data registers ***See the diagram below***.
+
+![AT24CS02_DatasheetScreenshot](docs/eeprom_block_diagram.png)
 
 #### Memory structure
 
 You can find my research for the structure in [/scripts/PIXMOB_EEPROM_flash2.bt](scripts/PIXMOB_EEPROM_flash2.bt)
-which works for [010Editor](https://www.sweetscape.com/010editor/).
+template which works for [010Editor](https://www.sweetscape.com/010editor/).
 
 ![010editor_sc](docs/eeprom_struct.png)
 
-### Future Work
 
-TO FILL OUT
+
+### Support & Contribute
+
+If you are interested in this work [@sean1983](https://github.com/sean1983) has setup a [Discord server](https://discord.gg/UYqTjC7xp3) feel free to join or contact me.
+
+---
 
 ## Other projects
 
