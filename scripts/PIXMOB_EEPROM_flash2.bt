@@ -38,6 +38,7 @@ ubyte CalcCheckSum8(ubyte colA, ubyte colB, ubyte colC)
 typedef enum <byte>
 {
     IF_MODE = 0x0,
+    UNK_MODE = 0x1,
     MEM_MODE = 0x11,
 } PIX_CTRL_MODE;
 
@@ -57,8 +58,17 @@ typedef struct {
     uint8_t color_red <fgcolor=cBlack, bgcolor=0x0000FF>;
     uint8_t color_blue <fgcolor=cBlack, bgcolor=0xFF0000>;
     uint8_t checksum <comment="checksum">; // ((color_green+color_red+color_blue) & 0xFF)
-    Printf("Col(%x,%x,%x) => [%x]\n", color_green, color_red, color_blue, 
-                            CalcCheckSum8(color_green, color_red, color_blue));
+    local uint8_t auto_calc_checksum = CalcCheckSum8(color_green, color_red, color_blue);
+    if (auto_calc_checksum == checksum)
+        {
+            //Printf("Col(%x,%x,%x) => [%x]\n", color_green, color_red, color_blue, 
+            //                auto_calc_checksum);
+        }
+    else
+        {
+            Printf("col @ location [0x%x] Checksum [%x] is wrong! Correct: [%x]\n", 
+                           (FTell() - 4), checksum, auto_calc_checksum);
+        }
 } _PIXMOB_COLOR_Profile;
 
 typedef struct {
@@ -113,6 +123,5 @@ local int64 fileSize = FileSize();
 local byte currentByte = 0;
 
 FSeek(0);
-
 _PIXMOB_MEM_SECTION_A mem_a;
 _PIXMOB_MEM_SECTION_B eeprom_mem_config;
