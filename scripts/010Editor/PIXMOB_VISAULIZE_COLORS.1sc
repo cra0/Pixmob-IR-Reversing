@@ -1,0 +1,97 @@
+#define TITLE "PIXMOB_VISUALIZER"
+
+typedef int bool;
+#define true  1;
+#define false 0;
+
+//c++
+typedef byte int8_t;
+typedef int16 int16_t;
+typedef int32 int32_t;
+typedef int64 int64_t;
+typedef int64 intptr_t;
+
+typedef uchar uint8_t;
+typedef uint16 uint16_t;
+typedef uint32 uint32_t;
+typedef uint64 uint64_t;
+typedef uint64 uintptr_t;
+
+long PaddingAlign(long num, int alignTo) {
+    return (num % alignTo == 0) ? 0 : alignTo - (num % alignTo);
+}
+
+bool AlignFS(int alignTo) {
+    local int b2skip = PaddingAlign(FTell(), alignTo);
+    FSkip(b2skip);
+    return true;
+}
+
+ubyte CalcCheckSum8(ubyte colA, ubyte colB, ubyte colC)
+{
+    local ubyte output = (colA + colB + colC) & 0xFF;
+    return output;
+}
+
+uint32_t MakeRGBColor(uint8_t red, uint8_t green, uint8_t blue) 
+{
+    return ((uint32_t)red << 16) | ((uint32_t)green << 8) | (uint32_t)blue;
+}
+
+uint32_t MakeBGRColor(uint8_t red, uint8_t green, uint8_t blue) 
+{
+    return ((uint32_t)blue << 16) | ((uint32_t)green << 8) | (uint32_t)red;
+}
+
+//These chips work in big Endian
+BigEndian();
+
+int i;
+
+int64 position;
+ubyte col_green;
+ubyte col_red;
+ubyte col_blue;
+ubyte checksum;
+ubyte calculatedChecksum;
+
+uint bookmark_color;
+
+char txtBuffer[1024];
+
+FSeek(0);
+FSkip(16); //Skip data we are not interested in
+
+for (i = 0; i < 16; i++) 
+{
+    position = FTell();
+    col_green = ReadUByte(position);
+    col_red = ReadUByte(position + 1);
+    col_blue = ReadUByte(position + 2);
+    checksum = ReadUByte(position + 3);
+
+    calculatedChecksum = CalcCheckSum8(col_green, col_red, col_blue);
+
+    Printf("Profile %d - Green: %x, Red: %x, Blue: %x, Checksum: %x (Calculated: %x)",
+        i + 1, col_green, col_red, col_blue, checksum, calculatedChecksum);
+
+    if (calculatedChecksum != checksum) 
+    {
+        Printf(" - Checksum ERROR (Fixed!)\n");
+        WriteByte(position + 3, calculatedChecksum);
+    }
+    else
+    {
+        Printf(" - Checksum Correct!\n");
+    }
+
+    Memset(txtBuffer, 0, 1024);
+    SPrintf(txtBuffer, "Profile_%x", i + 1);
+
+    bookmark_color = MakeBGRColor(col_red, col_green, col_blue);
+    Printf("bookmark_color: [%06x] \n", bookmark_color);
+
+    AddBookmark(position, txtBuffer, "byte", 4, cNone, bookmark_color);
+
+    FSeek(position + 4);
+}

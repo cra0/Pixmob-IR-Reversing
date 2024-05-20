@@ -106,11 +106,15 @@ I've intensionally left out the rest of the data as it's mostly **FF**. However,
 
 #### Memory structure
 
-You can find my research for the structure in [/scripts/PIXMOB_EEPROM_flash2.bt](scripts/PIXMOB_EEPROM_flash2.bt)
+You can find my research for the structure in [/scripts/010Editor/PIXMOB_EEPROM_flash2.bt](scripts/010Editor/PIXMOB_EEPROM_flash2.bt)
 template which works for [010Editor](https://www.sweetscape.com/010editor/).
 
 ![010editor_sc](docs/eeprom_struct.png)
 
+You can also apply the script [/scripts/010Editor/PIXMOB_VISAULIZE_COLORS.1sc](scripts/010Editor/PIXMOB_VISAULIZE_COLORS.1sc)
+which will show you the current colors in memory:
+
+![010editor_vs](docs/color_visuals.png)
 
 
 ### Support & Contribute
