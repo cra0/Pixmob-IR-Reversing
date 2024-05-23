@@ -17,7 +17,7 @@ I've come across one that has nothing written on it which I suspect is an ABOV m
 
 
 ### EEPROM
-The [/dumps](dumps/) directory contains what I've extracted from the SMD eeprom labeled **C24C02** from a few wristbands.
+The [/dumps](dumps/) directory contains what I've extracted from the SMD eeprom labeled **C24C02** and **AK16H** from a few wristbands.
 
 My soldering skills are pretty shit however I managed to connect some wires to it. After using the [Bus Pirate 5](https://hardware.buspirate.com/) I successfully dumped the contents.
 
@@ -119,7 +119,7 @@ which will show you the current colors in memory:
 
 ### Support & Contribute
 
-If you are interested in this work [@sean1983](https://github.com/sean1983) has setup a [Discord server](https://discord.gg/UYqTjC7xp3) feel free to join or contact me.
+If you are interested in this work there is a [Discord server](https://discord.gg/UYqTjC7xp3) someone has setup, feel free to join or contact me.
 
 ---
 
