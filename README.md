@@ -87,9 +87,9 @@ The startup procedure goes something like this:
 12. Address `0x55` is set for read, and data `0x1E` is read back.
     * **eeprom_mem_config->Release timer**
 13. Address `0x56` is set for read, and data `0x70` is read back.
-    * **eeprom_mem_config->Unknown ??**
+    * **eeprom_mem_config->cfg_profile_range**
 14. Address `0x57` is set for read, and data `0x06` is read back.
-    * **eeprom_mem_config->Unknown ??**
+    * **eeprom_mem_config->cfg_mode_selector**
 15. Address `0x14` is set for read, and data `0x98` is read back.
     * **mem_a->color2->green**
 16. Address `0x15` is set for read, and data `0xC0` is read back.
@@ -116,10 +116,32 @@ which will show you the current colors in memory:
 
 ![010editor_vs](docs/color_visuals.png)
 
+#### Bracelet Config - Memory Mode
 
-### Support & Contribute
+When address `0x04` is set to **MEM_MODE** `0x11` the bracelet will play back the data set in the EEPROM. 
+
+`eeprom_mem_config->cfg_profile_range` Bits [7:4] select the high end of the profile index and bits [3:0] selects the low end of the profile index.
+
+`eeprom_mem_config->cfg_mode_selector` is some kind of mode selector.
+
+##### Static mode
+`0x00`, `0x01`, `0x04`, `0x05`, `0x08`, `0x09`, `0x0C`, or `0x0D`: Pulses the RGB values in memory `0x50-0x52`. Last I2C read is for `0x57` during startup, no further I2C reads seen.
+
+##### Sequential mode
+`0x02`, `0x03`, `0x0A`, or `0x0B`: Sequential mode. Starts with profile index `eeprom_mem_config->cfg_profile_range[3:0]` and sequentially counts up to `eeprom_mem_config->cfg_profile_range[7:4]`, then rolls over. I2C read of profile data at the start of every pulse.
+
+##### Random mode
+0x06, 0x07, 0x0E, or 0x0F: Random profile index between `eeprom_mem_config->cfg_profile_range[3:0]` and `eeprom_mem_config->cfg_profile_range[7:4]`. I2C read profile data at the start of every pulse.
+
+
+### Support, Contribute & Thanks
 
 If you are interested in this work there is a [Discord server](https://discord.gg/UYqTjC7xp3) someone has setup, feel free to join or contact me.
+
+Thanks to [@Lyphiard](https://github.com/Lyphiard) for the research in regards to the profile/mode selector findings in memory mode.
+
+
+
 
 ---
 
