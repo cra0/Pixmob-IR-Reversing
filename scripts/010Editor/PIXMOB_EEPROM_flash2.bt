@@ -54,9 +54,9 @@ typedef struct {
 } _PIXMOB_CONTROL_REGISTER;
 
 typedef struct {
-    uint8_t color_green <fgcolor=cBlack, bgcolor=0x00FF00>;
-    uint8_t color_red <fgcolor=cBlack, bgcolor=0x0000FF>;
-    uint8_t color_blue <fgcolor=cBlack, bgcolor=0xFF0000>;
+    uint8_t color_green; //<fgcolor=cBlack, bgcolor=0x00FF00>;
+    uint8_t color_red; //<fgcolor=cBlack, bgcolor=0x0000FF>;
+    uint8_t color_blue; //<fgcolor=cBlack, bgcolor=0xFF0000>;
     uint8_t checksum <comment="checksum">; // ((color_green+color_red+color_blue) & 0xFF)
     local uint8_t auto_calc_checksum = CalcCheckSum8(color_green, color_red, color_blue);
     if (auto_calc_checksum == checksum)
@@ -104,14 +104,34 @@ typedef struct {
 } _PIXMOB_MEM_SECTION_A;
 
 typedef struct {
-    uint8_t cfg_col_green_brightness_value <fgcolor=cBlack, bgcolor=0x00FF00>;
-    uint8_t cfg_col_red_brightness_value <fgcolor=cBlack, bgcolor=0x0000FF>;
-    uint8_t cfg_col_blue_brightness_value <fgcolor=cBlack, bgcolor=0xFF0000>;
-    uint8_t cfg_attack_intensity;
+    uint8_t cfg_memmode_col_green_value; //<fgcolor=cBlack, bgcolor=0x00FF00>;
+    uint8_t cfg_memmode_col_red_value; //<fgcolor=cBlack, bgcolor=0x0000FF>;
+    uint8_t cfg_memmode_col_blue_value; //<fgcolor=cBlack, bgcolor=0xFF0000>;
+    uint8_t cfg_attack_flow_timer;
     uint8_t cfg_hold_timer; //How long to stay at that intensity before starting to dim
     uint8_t cfg_release_timer; //How slow to fade from full intensity to dim
-    uint8_t cfg_valD; //nooo idea what this is
-    uint8_t cfg_valE; //0x20 or 0x06 idk what this is
+
+    union 
+    {
+        uint8_t cfg_profile_range;
+        struct 
+        {
+            uint8_t high_end_profile_index : 4;  // Bits [7:4]
+            uint8_t low_end_profile_index : 4;   // Bits [3:0]
+        } cfg_profile_range_dissect;
+    } cfg_profile_range_u;
+
+    union 
+    {
+        uint8_t cfg_mode_selector;
+        struct 
+        {
+            uint8_t reserved_bits : 5;      // Bits [7:3]
+            uint8_t mode_bits : 2;          // Bits [2:1]
+            uint8_t another_reserved_bit : 1; // Bit [0]
+        } cfg_mode_selector_dissect;
+    } cfg_mode_selector_u;
+
 } _PIXMOB_MEM_SECTION_B;
 
 //These chips work in big Endian
