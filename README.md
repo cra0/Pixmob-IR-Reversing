@@ -138,7 +138,7 @@ When address `0x04` is set to **MEM_MODE** `0x11` the bracelet will play back th
 
 If you are interested in this work there is a [Discord server](https://discord.gg/UYqTjC7xp3) someone has setup, feel free to join or contact me.
 
-Thanks to [@Lyphiard](https://github.com/Lyphiard) for the research in regards to the profile/mode selector findings in memory mode.
+Thanks to [@jamesw343](https://github.com/jamesw343) for the research in regards to the profile/mode selector findings in memory mode.
 
 
 
